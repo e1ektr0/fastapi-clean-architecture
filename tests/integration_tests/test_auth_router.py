@@ -1,10 +1,17 @@
+from app.schema.user_schema import User
+
+
 def test_sign_up_and_sign_in(client):
     response = client.post(
         "/api/v1/auth/sign-up",
         json={"email": "test", "password": "test", "name": "test"},
     )
+
     assert response.status_code == 200
     response_json = response.json()
+    user = User(**response.json())
+
+    assert response_json["email"] == user.email
     assert response_json["email"] == "test"
     assert response_json["name"] == "test"
     assert response_json["id"] > 0
