@@ -11,6 +11,7 @@ from app.util.class_object import singleton
 @singleton
 class AppCreator:
     def __init__(self):
+        print('ddd')
         # set app default
         self.app = FastAPI(
             title=configs.PROJECT_NAME,
@@ -18,10 +19,14 @@ class AppCreator:
             version="0.0.1",
         )
 
+        print('ddd')
+
         # set db and container
         self.container = Container()
         self.db = self.container.db()
-        # self.db.create_database()
+        #  print(self.db._engine.url)
+        self.db.create_database()
+        print('ddd')
 
         # set cors
         if configs.BACKEND_CORS_ORIGINS:
@@ -46,3 +51,8 @@ app_creator = AppCreator()
 app = app_creator.app
 db = app_creator.db
 container = app_creator.container
+
+
+
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=8000)

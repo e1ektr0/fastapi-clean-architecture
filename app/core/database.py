@@ -4,6 +4,7 @@ from typing import Any, Callable
 from sqlalchemy import create_engine, orm
 from sqlalchemy.ext.declarative import as_declarative, declared_attr
 from sqlalchemy.orm import Session
+from sqlalchemy_utils import database_exists, create_database
 
 
 @as_declarative()
@@ -29,6 +30,8 @@ class Database:
         )
 
     def create_database(self) -> None:
+        if not database_exists(self._engine.url):
+            create_database(self._engine.url)
         BaseModel.metadata.create_all(self._engine)
 
     @contextmanager
